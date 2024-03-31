@@ -1,0 +1,7 @@
+.idea
+.mono
+**/obj
+**/bin
+**/.DS_Store
+BenchmarkDotNet.Artifacts
+ 
