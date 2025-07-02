@@ -1,4 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +14,25 @@ namespace MyApp
 		}
 	}
 
+	public class FastConfig : ManualConfig
+	{
+		public FastConfig()
+		{
+			// Fast execution for development (approx 2 min per runtime)
+			AddJob(Job.Default
+				.WithWarmupCount(1)
+				.WithInvocationCount(3)
+				.WithUnrollFactor(3));
+
+			// AddJob(Job.Default
+			// 	.WithWarmupCount(6)
+			// 	.WithInvocationCount(16)
+			// 	.WithUnrollFactor(16));
+		}
+	}
+
 	[MemoryDiagnoser]
+	[Config(typeof(FastConfig))]
 	public class EfLazyLoading
 	{
 		[GlobalSetup]
